@@ -1,37 +1,31 @@
-def ordenar(elementos: list) -> list:
-	"""Ordena una lista usando Merge Sort.
+def reordenar(A):
+    if not A:
+        return []
+        
+    n = len(A)
+    medio = (n - 1) // 2
+    pivote = A[medio]
 
-	Al quedar ordenada, el elemento central queda en la posición
-	len(elementos) // 2: a su izquierda quedan la mitad de los elementos
-	menores que él y a su derecha queda la otra mitad.
+    A_sin_pivote = A[:medio] + A[medio+1:]
 
-	Merge Sort divide la lista en dos mitades, ordena cada una recursivamente
-	y luego las fusiona comparando sus primeros elementos. Su complejidad es
-	O(n log n), con O(n) de memoria auxiliar.
-	"""
-	if len(elementos) <= 1:
-		return elementos.copy()
+    menores = [x for x in A_sin_pivote if x < pivote]
+    otros = [x for x in A_sin_pivote if x >= pivote]
 
-	mitad = len(elementos) // 2
-	izquierda = ordenar(elementos[:mitad])
-	derecha = ordenar(elementos[mitad:])
+    mitad = len(menores) // 2
 
-	resultado: list = []
-	i = j = 0
-	while i < len(izquierda) and j < len(derecha):
-		if izquierda[i] <= derecha[j]:
-			resultado.append(izquierda[i])
-			i += 1
-		else:
-			resultado.append(derecha[j])
-			j += 1
+    menores_izquierda = menores[:mitad]
+    menores_derecha = menores[mitad:]
 
-	resultado.extend(izquierda[i:])
-	resultado.extend(derecha[j:])
-	return resultado
+    cantidad_izquierda = medio
+    faltan = cantidad_izquierda - len(menores_izquierda)
 
+    izquierda = menores_izquierda + otros[:faltan]
+    derecha = menores_derecha + otros[faltan:]
+
+    return izquierda + [pivote] + derecha
 
 if __name__ == "__main__":
-	lista_ordenada = ordenar([7, 2, 9, 1, 5, 3, 8])
-	print(lista_ordenada)
-	print("Elemento del medio:", lista_ordenada[len(lista_ordenada) // 2])
+    A = [10, 1, 7, 6, 5, 8, 9, 4, 3, 2]
+    
+    print("Lista original:  ", A)
+    print("Lista reordenada:", reordenar(A))
